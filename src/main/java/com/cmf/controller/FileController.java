@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 
 @RestController
@@ -29,7 +28,6 @@ public class FileController {
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile attach) throws Exception {
-            //获取文件后缀名
         if (!attach.isEmpty()) {
             byte[] bytes = attach.getBytes();
             String fileName = attach.getOriginalFilename();
