@@ -26,6 +26,14 @@ public class FileController {
         return fastDFSClient.download(group, remoteFileName,specFilaName);
     }
 
+    @RequestMapping(value = "/download1")
+    public int download1(@Param("filePath") String filePath, @Param("specFilaName") String specFilaName) throws IOException, MyException {
+        String substr = filePath.substring(filePath.indexOf("group"));
+        String group = substr.split("/")[0];
+        String remoteFileName = substr.substring(substr.indexOf("/")+1);
+        return fastDFSClient.download1(group, remoteFileName,specFilaName);
+    }
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile attach) throws Exception {
         if (!attach.isEmpty()) {

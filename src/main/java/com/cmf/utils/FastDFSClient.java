@@ -7,7 +7,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 
 public class FastDFSClient {
@@ -15,6 +17,7 @@ public class FastDFSClient {
     private static TrackerServer trackerServer = null;
     private static StorageServer storageServer = null;
     private static StorageClient storageClient = null;
+    private static StorageClient1 storageClient1 = null;
 
     private FastDFSClient() {
     }
@@ -29,7 +32,7 @@ public class FastDFSClient {
 
     static  {
         try {
-            ClientGlobal.initByProperties("fastdfs-client.properties");
+            ClientGlobal.initByProperties("properties/fastdfs-client.properties");
             trackerClient = new TrackerClient();
             trackerServer = trackerClient.getConnection();
             storageServer = null;
@@ -41,88 +44,66 @@ public class FastDFSClient {
         }
     }
 
-    /**
-     * 上传文件方法
-     * <p>Title: uploadFile</p>
-     * <p>Description: </p>
-     * @param fileName 文件全路径
-     * @param extName 文件扩展名，不包含（.）
-     * @param metas 文件扩展信息
-     * @return
-     * @throws Exception
-     */
-    public String[] uploadFile(String fileName, String extName, NameValuePair[] metas) throws Exception {
-        String result[] = storageClient.upload_file(fileName, extName, metas);
-        return result;
-    }
-
-
-    public String[] uploadFile(String fileName) throws Exception {
-        return uploadFile(fileName, null, null);
-    }
-
-    public String[] uploadFile(String fileName, String extName) throws Exception {
-        return uploadFile(fileName, extName, null);
-    }
-
-    /**
-     * 上传文件方法
-     * <p>Title: uploadFile</p>
-     * <p>Description: </p>
-     * @param fileContent 文件的内容，字节数组
-     * @param extName 文件扩展名
-     * @param metas 文件扩展信息
-     * @return
-     * @throws Exception
-     */
-    public String[] uploadFile(byte[] fileContent, String extName, NameValuePair[] metas) throws Exception {
-        String result[] = storageClient.upload_file(fileContent, extName, metas);
-        return result;
-    }
-
-    public String[] uploadFile(byte[] fileContent) throws Exception {
-        return uploadFile(fileContent, null, null);
-    }
-
-    public String[] uploadFile(byte[] fileContent, String extName) throws Exception {
-        return uploadFile(fileContent, extName, null);
-    }
-
-    public byte[] downloadFile(String group_name, String remote_filename) throws IOException, MyException{
-        return storageClient.download_file(group_name, remote_filename);
-    }
-
-    public int downloadFile(String group_name, String remote_filename, String local_filename) throws IOException, MyException {
-        return storageClient.download_file(group_name, remote_filename, local_filename);
-    }
-
-
-    public FileInfo getFileInfo(String group_name, String remote_filename) throws IOException, MyException {
-        return storageClient.get_file_info(group_name,remote_filename);
-    }
-
-    public int deleteFile(String group_name, String remote_filename) throws IOException, MyException {
-        return storageClient.delete_file(group_name,remote_filename);
-    }
-
-
-
-    /**
-     * <strong>方法概要： 文件下载</strong> <br>
-     * <strong>创建时间： 2016-9-26 上午10:28:21</strong> <br>
-     *
-     * @param groupName
-     * @param remoteFileName
-     * @return returned value comment here
-     * @author Wang Liang
-     */
-    public ResponseEntity<byte[]> download(String groupName,
-                                                  String remoteFileName, String specFileName) throws IOException, MyException {
+    public ResponseEntity<byte[]> download(String fileId, String specFileName) throws IOException, MyException {
         byte[] content = null;
         HttpHeaders headers = new HttpHeaders();
-        content = downloadFile(groupName, remoteFileName);
+        content = storageClient1.download_file1(fileId);
         headers.setContentDispositionFormData("attachment",  new String(specFileName.getBytes("UTF-8"),"iso-8859-1"));
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         return new ResponseEntity<byte[]>(content, headers, HttpStatus.CREATED);
     }
+
+    public int download1(String fileId, String specFileName) throws IOException, MyException {
+        return storageClient1.download_file1(fileId, specFileName);
+    }
+
+    public String[] uploadFile(MultipartFile multipartFile) throws Exception {
+        byte[] bytes = multipartFile.getBytes();
+        String fileName = multipartFile.getOriginalFilename();
+        String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+        return storageClient1.upload_file(bytes,ext,null);
+    }
+
+    public String[] uploadFile(MultipartFile multipartFile, NameValuePair[] nameValuePair) throws Exception {
+        byte[] bytes = multipartFile.getBytes();
+        String fileName = multipartFile.getOriginalFilename();
+        String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+        return storageClient1.upload_file(bytes,ext, nameValuePair);
+    }
+
+    public String[] uploadFile(File file) throws Exception {
+        byte[] bytes = FileUtils.File2byte(file);
+        String fileName = file.getName();
+        String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+        return storageClient1.upload_file(bytes,ext,null);
+    }
+
+    public String[] uploadFile(File file,NameValuePair[] nameValuePair) throws Exception {
+        byte[] bytes = FileUtils.File2byte(file);
+        String fileName = file.getName();
+        String ext = fileName.substring(fileName.lastIndexOf(".")+1);
+        return storageClient1.upload_file(bytes,ext,null);
+    }
+    
+    public int deleteFile(String fileId) throws IOException, MyException {
+        return storageClient1.delete_file1(fileId);
+    }
+    
+    public FileInfo getFileInfo(String fileId) throws IOException, MyException {
+        return storageClient1.get_file_info1(fileId);
+    }
+
+    public FileInfo queryFileInfo(String fileId) throws IOException, MyException {
+        return storageClient1.query_file_info1(fileId);
+    }
+
+    public NameValuePair[] getMetadata(String fileId) throws IOException, MyException {
+       return storageClient1.get_metadata1(fileId);
+    }
+
+    public int setMetadata(String fileId, NameValuePair[] metaList, byte opFlag) throws IOException, MyException {
+        return storageClient1.set_metadata1(fileId, metaList, opFlag);
+    }
+    
+    
 }
