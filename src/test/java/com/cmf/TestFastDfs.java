@@ -25,7 +25,7 @@ public class TestFastDfs {
     @Resource
     private FastDFSTemplate dfsTemplate;
 
-//            @Test
+            @Test
     public void testUploadAndDel() throws FastDFSException {
         FastDfsInfo rv = dfsTemplate.upload("".getBytes(), "txt");
         System.out.println(rv);
@@ -33,7 +33,7 @@ public class TestFastDfs {
         System.out.println("删除成功！");
     }
 
-        @Test
+//        @Test
     public void testPool() throws InterruptedException {
         Runnable runnable = () -> {
             try {
@@ -51,7 +51,7 @@ public class TestFastDfs {
             }
         };
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             new Thread(runnable).start();
         }
         Thread.currentThread().join();
