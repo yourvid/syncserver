@@ -3,16 +3,9 @@ package com.cmf.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 
@@ -27,8 +20,8 @@ import java.util.List;
  */
 @Configuration
 public class CommonConfig {
-    @Autowired
-    private RedisTemplate redisTemplate;
+//    @Autowired
+//    private RedisTemplate redisTemplate;
 
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters() {
@@ -48,18 +41,18 @@ public class CommonConfig {
 
     }
 
-    @Bean
-    public RedisTemplate redisTemplateInit() {
-        StringRedisSerializer redisSerializer = new StringRedisSerializer();//Long类型不可以会出现异常信息;
-        redisTemplate.setKeySerializer(redisSerializer);
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
-    }
+//    @Bean
+//    public RedisTemplate redisTemplateInit() {
+//        StringRedisSerializer redisSerializer = new StringRedisSerializer();//Long类型不可以会出现异常信息;
+//        redisTemplate.setKeySerializer(redisSerializer);
+//        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+//        ObjectMapper om = new ObjectMapper();
+//        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+//        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+//        jackson2JsonRedisSerializer.setObjectMapper(om);
+//        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+//        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+//        redisTemplate.afterPropertiesSet();
+//        return redisTemplate;
+//    }
 }
