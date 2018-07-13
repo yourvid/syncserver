@@ -4,7 +4,6 @@ package com.cmf;
 import com.cmf.fastdfs.FastDFSTemplate;
 import com.cmf.fastdfs.FastDfsInfo;
 import com.cmf.fastdfs.exception.FastDFSException;
-import org.csource.fastdfs.ProtoCommon;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,8 +12,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +22,7 @@ public class TestFastDfs {
     @Resource
     private FastDFSTemplate dfsTemplate;
 
-            @Test
+//            @Test
     public void testUploadAndDel() throws FastDFSException {
         FastDfsInfo rv = dfsTemplate.upload("".getBytes(), "txt");
         System.out.println(rv);
@@ -33,7 +30,7 @@ public class TestFastDfs {
         System.out.println("删除成功！");
     }
 
-//        @Test
+        @Test
     public void testPool() throws InterruptedException {
         Runnable runnable = () -> {
             try {
@@ -59,11 +56,11 @@ public class TestFastDfs {
 
 
 //    @Test
-    public void activeTest() throws IOException {
-        Socket socket = new Socket("10.30.0.81", 22122);
-        Boolean re = ProtoCommon.activeTest(socket);
-        System.out.println(re);
-    }
+//    public void activeTest() throws IOException {
+//        Socket socket = new Socket("10.30.0.81", 22122);
+//        Boolean re = ProtoCommon.activeTest(socket);
+//        System.out.println(re);
+//    }
 
 
 

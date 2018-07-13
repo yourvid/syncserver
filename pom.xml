@@ -103,6 +103,11 @@
             <version>4.3.13.RELEASE</version>
         </dependency>
         <!--Test utils End-->
+        <!--<dependency>-->
+            <!--<groupId>com.cmf</groupId>-->
+            <!--<artifactId>fastdfs</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
 
 
     </dependencies>
